@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,38 +18,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::redirect('/students', '/');
-
-// Route::view('/', 'welcome');
-
-Route::prefix('/students')->middleware(['auth'])->group(function () {
-    Route::get('/', function () {
-        return 'Students List';
-    });
-    Route::get('/{id}', function ($id) {
-        return 'Student number ' . $id;
-    });
-    Route::get('/{id}/{name?}', function ($id, $name = ' ') {
-        return 'Student number ' . $id . " named " . $name;
-    });
-    Route::get('/create', function () {
-        return 'Student user created';
-    });
-    Route::get('/{id}/edit', function ($id) {
-        return 'This is edit form of student ' . $id;
-    });
-    Route::post('/', function () {
-        return 'Student added';
-    });
-    Route::delete('/{id}', function ($id) {
-        return 'Student number ' . $id . ' is deleted';
-    });
+Route::controller(StudentController::class)->prefix('/students')->middleware(['auth'])->group(function () {
+    Route::get('/', 'listStudents');
+    Route::get('/{id}', 'showStudent');
+    Route::get('/{id}/{name?}', 'studentDetails');
+    Route::get('/create', 'createStudent');
+    Route::get('/{id}/edit', 'editStudent');
+    Route::post('/', 'addStudent');
+    Route::delete('/{id}', 'removeStudent');
+    Route::put('/{id}', 'updateStudent');
 });
 
 
-Route::put('/student/{id}', function ($id) {
-    return 'Student number ' . $id . ' is updated';
-});
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
