@@ -2,40 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class StudentController extends Controller
 {
-    public function listStudents()
+    public function create()
     {
-        return 'Students list';
+        return view('students/create');
     }
-    public function showStudent($id)
+
+    public function store(Request $request)
     {
-        return 'Student number ' . $id;
+        $student = new Student();
+        $student->name = $request->name;
+        $student->age = $request->age;
+        $student->IDno = $request->IDno;
+        $student->save();
+        return redirect('/students/create');
     }
-    public function studentDetails($id, $name = ' ')
+
+    public function index()
     {
-        return 'Student number ' . $id . " named " . $name;
+        $all_students = Student::all();
+        return view('students.index', ['students' => $all_students]);
     }
-    public function createStudent()
+
+
+    public function edit($id)
     {
-        return 'Student user created';
+        return view('students.edit', [
+            'student' => Student::find($id)
+        ]);
     }
-    public function editStudent($id)
+
+    public function update(Request $request, $id)
     {
-        return 'This is edit form of student ' . $id;
+        $student = Student::find($id);
+        $student->name = $request->name;
+        $student->age = $request->age;
+        $student->IDno = $request->IDno;
+        if ($student->save()) {
+            return redirect()->route('students.index');
+        }
     }
-    public function addStudent()
+    public function destroy($id)
     {
-        return 'Student added';
+        $student = Student::find($id);
+        if (!$student) {
+            return redirect()->route('students.index')->with('error', 'Student not found');
+        }
+        $student->delete();
+        return redirect()->route('students.index');
     }
-    public function removeStudent($id)
-    {
-        return 'Student number ' . $id . ' is deleted';
-    }
-    public function updateStudent($id)
-    {
-        return 'Student number ' . $id . ' is updated';
-    }
+
 }
