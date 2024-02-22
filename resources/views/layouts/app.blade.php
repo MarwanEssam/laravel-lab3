@@ -20,18 +20,9 @@
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/posts') }}">
-                   Posts
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
                 </a>
-                <a class="navbar-brand" href="{{ url('/students') }}">
-                    Students
-                 </a>
-                <a class="navbar-brand btn btn-success py-0 text-white " href="{{ url('/posts/create') }}">
-                    Add post
-                 </a>
-                 <a class="navbar-brand btn btn-success py-0 text-white " href="{{ url('/students/create') }}">
-                    Add student
-                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -82,10 +73,7 @@
         </nav>
 
         <main class="py-4">
-            <div class="container ">
-
-                @yield('content')
-            </div>
+            @yield('content')
         </main>
     </div>
 </body>
