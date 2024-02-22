@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,18 +18,24 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::controller(PostController::class)->prefix('/posts')->middleware('auth')->group(function () {
 
-Route::controller(StudentController::class)->prefix('/students')->middleware(['auth'])->group(function () {
-    Route::get('/', 'listStudents');
-    Route::get('/{id}', 'showStudent');
-    Route::get('/{id}/{name?}', 'studentDetails');
-    Route::get('/create', 'createStudent');
-    Route::get('/{id}/edit', 'editStudent');
-    Route::post('/', 'addStudent');
-    Route::delete('/{id}', 'removeStudent');
-    Route::put('/{id}', 'updateStudent');
+    Route::get('/create', 'create')->name('posts.create');
+    Route::post('/', 'store')->name('posts.store');
+    Route::get('/', 'index')->name('posts.index');
+    Route::get('/{id}/edit', 'edit')->name('posts.edit');
+    Route::put('/{id}/update', 'update')->name('posts.update');
+    Route::delete('/{id}', 'destroy')->name('posts.destroy');
 });
+Route::controller(StudentController::class)->prefix('/students')->middleware('auth')->group(function () {
 
+    Route::get('/create', 'create')->name('students.create');
+    Route::post('/', 'store')->name('students.store');
+    Route::get('/', 'index')->name('students.index');
+    Route::get('/{id}/edit', 'edit')->name('students.edit');
+    Route::put('/{id}/update', 'update')->name('students.update');
+    Route::delete('/{id}', 'destroy')->name('students.destroy');
+});
 
 Auth::routes();
 
